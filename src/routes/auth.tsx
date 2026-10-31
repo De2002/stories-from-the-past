@@ -14,6 +14,7 @@ export const Route = createFileRoute("/auth")({
       { property: "og:description", content: "Join LeBeHo to share old things and follow collectors worldwide." },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { mode?: "in" | "up" } => (s.mode === "up" || s.mode === "in" ? { mode: s.mode } : {}),
   component: AuthPage,
 });
 
@@ -22,7 +23,8 @@ const field = "w-full rounded-md border border-input bg-card px-3 py-2.5 text-sm
 function AuthPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"in" | "up">("in");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<"in" | "up">(search.mode ?? "in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
