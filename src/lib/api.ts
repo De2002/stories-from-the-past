@@ -22,7 +22,7 @@ export type Post = {
   comments: { count: number }[];
 };
 
-export const CATEGORIES = ["Objects", "Technology", "Photography", "Music", "Household", "Places", "Fashion", "Documents"];
+export const CATEGORIES = ["Objects", "People", "Technology", "Photography", "Music", "Household", "Places", "Fashion", "Documents"];
 
 const POST_SELECT = "*, profiles!posts_user_id_fkey(*), likes(user_id), comments(count)";
 

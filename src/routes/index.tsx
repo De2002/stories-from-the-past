@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { PostCard } from "@/components/PostCard";
 import { Avatar } from "@/components/PostImage";
+import { LogoLoader } from "@/components/Brand";
 import { CATEGORIES, fetchFollowingIds, fetchPosts, fetchSuggested } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
@@ -75,7 +76,7 @@ function Feed() {
         ))}
       </div>
 
-      {posts.isLoading && <div className="p-8 text-center text-muted-foreground">Dusting off the archive…</div>}
+      {posts.isLoading && <LogoLoader label="Dusting off the archive" />}
       {posts.data?.length === 0 && (
         <div className="p-10 text-center text-muted-foreground">
           {showFollowing ? "Follow a few collectors to fill this feed." : "Nothing here yet — be the first to post."}

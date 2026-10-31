@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth";
 import { TopBar, BottomNav } from "@/components/AppNav";
 import { Toaster } from "@/components/ui/sonner";
+import { SplashScreen, WelcomeGate } from "@/components/Brand";
 
 function NotFoundComponent() {
   return (
@@ -96,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
       },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
   }),
   shellComponent: RootShell,
@@ -130,6 +131,8 @@ function RootComponent() {
           <Outlet />
         </main>
         <BottomNav />
+        <WelcomeGate />
+        <SplashScreen />
         <Toaster />
       </AuthProvider>
     </QueryClientProvider>
