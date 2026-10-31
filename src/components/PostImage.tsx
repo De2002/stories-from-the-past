@@ -21,7 +21,7 @@ export function useImageUrl(src: string) {
   return url;
 }
 
-export function PostImage({ src, alt, className, eager }: { src: string; alt: string; className?: string; eager?: boolean }) {
+export function PostImage({ src, alt, className, eager }: { src: string; alt: string; className?: string | undefined; eager?: boolean | undefined }) {
   const url = useImageUrl(src);
   if (!url) return <div className={`animate-pulse bg-muted ${className ?? ""}`} />;
   return <img src={url} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />;

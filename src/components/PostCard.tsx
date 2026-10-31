@@ -3,7 +3,7 @@ import { Avatar, PostImage } from "./PostImage";
 import { PostActions } from "./PostActions";
 import { timeAgo, type Post } from "@/lib/api";
 
-export function PostCard({ post, eager }: { post: Post; eager?: boolean }) {
+export function PostCard({ post, eager }: { post: Post; eager?: boolean | undefined }) {
   const p = post.profiles;
   return (
     <article className="border-b border-border pb-6">

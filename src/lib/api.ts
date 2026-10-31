@@ -26,7 +26,7 @@ export const CATEGORIES = ["Objects", "Technology", "Photography", "Music", "Hou
 
 const POST_SELECT = "*, profiles(*), likes(user_id), comments(count)";
 
-export async function fetchPosts(opts: { userIds?: string[]; userId?: string; category?: string } = {}) {
+export async function fetchPosts(opts: { userIds?: string[] | undefined; userId?: string | undefined; category?: string | undefined } = {}) {
   let q = supabase.from("posts").select(POST_SELECT).order("created_at", { ascending: false }).limit(60);
   if (opts.userIds) q = q.in("user_id", opts.userIds.length ? opts.userIds : ["00000000-0000-0000-0000-000000000000"]);
   if (opts.userId) q = q.eq("user_id", opts.userId);
