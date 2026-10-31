@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Bookmark, Compass, PlusSquare, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { LOGO_URL } from "@/components/Brand";
 
 export function useMyProfile() {
   const { user } = useAuth();
@@ -18,10 +19,9 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-xl items-center px-4">
-        <Link to="/" className="font-display text-2xl italic tracking-tight">
-          LeBeHo
+        <Link to="/" aria-label="LeBeHo home">
+          <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain" />
         </Link>
-        <span className="label-tag ml-2 mt-1 text-muted-foreground">est. long ago</span>
         {ready && !user && (
           <Link to="/auth" className="ml-auto rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground">
             Sign in
