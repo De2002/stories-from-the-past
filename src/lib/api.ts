@@ -24,7 +24,7 @@ export type Post = {
 
 export const CATEGORIES = ["Objects", "Technology", "Photography", "Music", "Household", "Places", "Fashion", "Documents"];
 
-const POST_SELECT = "*, profiles(*), likes(user_id), comments(count)";
+const POST_SELECT = "*, profiles!posts_user_id_fkey(*), likes(user_id), comments(count)";
 
 export async function fetchPosts(opts: { userIds?: string[] | undefined; userId?: string | undefined; category?: string | undefined } = {}) {
   let q = supabase.from("posts").select(POST_SELECT).order("created_at", { ascending: false }).limit(60);
@@ -45,7 +45,7 @@ export async function fetchPost(id: string) {
 export async function fetchComments(postId: string) {
   const { data, error } = await supabase
     .from("comments")
-    .select("*, profiles(*)")
+    .select("*, profiles!comments_user_id_fkey(*)")
     .eq("post_id", postId)
     .order("created_at");
   if (error) throw error;
