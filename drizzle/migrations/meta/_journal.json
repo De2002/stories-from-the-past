@@ -8,6 +8,13 @@
       "when": 1793456373541,
       "tag": "0000_lebeho_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793459370727,
+      "tag": "0001_admin_roles",
+      "breakpoints": true
     }
   ]
 }
