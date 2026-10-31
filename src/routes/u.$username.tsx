@@ -41,7 +41,7 @@ function ProfilePage() {
 
   const save = async () => {
     const { error } = await supabase.from("profiles").update({ display_name: name, bio }).eq("id", pr.id);
-    if (error) return toast.error("Couldn't save");
+    if (error) { toast.error("Couldn't save"); return; }
     setEditing(false);
     qc.invalidateQueries({ queryKey: ["profile", username] });
   };

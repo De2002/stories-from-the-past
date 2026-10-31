@@ -17,7 +17,7 @@ export function FollowButton({ targetId }: { targetId: string }) {
   const isFollowing = following.data?.includes(targetId) ?? false;
 
   const toggle = async () => {
-    if (!user) return navigate({ to: "/auth" });
+    if (!user) { navigate({ to: "/auth" }); return; }
     if (isFollowing) await supabase.from("follows").delete().eq("follower_id", user.id).eq("following_id", targetId);
     else await supabase.from("follows").insert({ follower_id: user.id, following_id: targetId });
     qc.invalidateQueries({ queryKey: ["followingIds"] });

@@ -38,15 +38,15 @@ function NewPost() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !file) return toast.error("Add a photograph first");
-    if (!f.title.trim() || !f.story.trim()) return toast.error("Give it a title and a backstory");
+    if (!user || !file) { toast.error("Add a photograph first"); return; }
+    if (!f.title.trim() || !f.story.trim()) { toast.error("Give it a title and a backstory"); return; }
     setBusy(true);
     const ext = file.name.split(".").pop() || "jpg";
     const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
     const up = await supabase.storage.from("post-images").upload(path, file, { contentType: file.type });
     if (up.error) {
       setBusy(false);
-      return toast.error("Upload failed");
+      { toast.error("Upload failed"); return; }
     }
     const { data, error } = await supabase
       .from("posts")
@@ -54,7 +54,7 @@ function NewPost() {
       .select("id")
       .single();
     setBusy(false);
-    if (error) return toast.error("Couldn't publish");
+    if (error) { toast.error("Couldn't publish"); return; }
     navigate({ to: "/p/$id", params: { id: data.id } });
   };
 
@@ -77,7 +77,7 @@ function NewPost() {
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            if (file.size > 10 * 1024 * 1024) return toast.error("Max 10MB");
+            if (file.size > 10 * 1024 * 1024) { toast.error("Max 10MB"); return; }
             setFile(file);
             setPreview(URL.createObjectURL(file));
           }}

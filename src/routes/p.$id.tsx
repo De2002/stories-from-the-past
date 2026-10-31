@@ -41,7 +41,7 @@ function PostPage() {
     setBusy(true);
     const { error } = await supabase.from("comments").insert({ post_id: id, user_id: user.id, body: body.trim() });
     setBusy(false);
-    if (error) return toast.error("Couldn't post comment");
+    if (error) { toast.error("Couldn't post comment"); return; }
     setBody("");
     qc.invalidateQueries({ queryKey: ["comments", id] });
     qc.invalidateQueries({ queryKey: ["post", id] });
