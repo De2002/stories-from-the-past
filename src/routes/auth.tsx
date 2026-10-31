@@ -14,7 +14,7 @@ export const Route = createFileRoute("/auth")({
       { property: "og:description", content: "Join LeBeHo to share old things and follow collectors worldwide." },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>): { mode?: "in" | "up" } => (s.mode === "up" || s.mode === "in" ? { mode: s.mode } : {}),
+  validateSearch: (s: Record<string, unknown>): { mode?: "in" | "up" } => (s["mode"] === "up" || s["mode"] === "in" ? { mode: s["mode"] } : {}),
   component: AuthPage,
 });
 
