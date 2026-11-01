@@ -12,6 +12,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Join LeBeHo to share old things and follow collectors worldwide." },
       { property: "og:title", content: "Sign in — LeBeHo" },
       { property: "og:description", content: "Join LeBeHo to share old things and follow collectors worldwide." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { mode?: "in" | "up" } => (s["mode"] === "up" || s["mode"] === "in" ? { mode: s["mode"] } : {}),
