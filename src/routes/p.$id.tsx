@@ -8,6 +8,7 @@ import { PostActions } from "@/components/PostActions";
 import { FollowButton } from "@/components/FollowButton";
 import { fetchComments, fetchPost, timeAgo } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { ReportPost } from "@/components/ReportPost";
 
 export const Route = createFileRoute("/p/$id")({
   head: () => ({
@@ -55,7 +56,8 @@ function PostPage() {
         </div>
       </div>
       <div className="space-y-4 px-4 pt-4">
-        <PostActions post={p} />
+        {p.is_hidden && <p className="rounded-md border border-border bg-secondary p-3 text-sm">This post is hidden from the public feed.</p>}
+        <div className="flex items-center justify-between"><PostActions post={p} /><ReportPost postId={p.id} /></div>
         <div className="flex flex-wrap gap-x-3 gap-y-1">
           {p.era && <span className="label-tag text-primary">{p.era}</span>}
           {p.location && <span className="label-tag text-muted-foreground">{p.location}</span>}

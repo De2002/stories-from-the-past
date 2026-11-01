@@ -17,6 +17,7 @@ export type Post = {
   location: string;
   category: string;
   created_at: string;
+  is_hidden: boolean;
   profiles: Profile | null;
   likes: { user_id: string }[];
   comments: { count: number }[];
@@ -27,7 +28,7 @@ export const CATEGORIES = ["Objects", "People", "Technology", "Photography", "Mu
 const POST_SELECT = "*, profiles!posts_user_id_fkey(*), likes(user_id), comments(count)";
 
 export async function fetchPosts(opts: { userIds?: string[] | undefined; userId?: string | undefined; category?: string | undefined } = {}) {
-  let q = supabase.from("posts").select(POST_SELECT).order("created_at", { ascending: false }).limit(60);
+  let q = supabase.from("posts").select(POST_SELECT).eq("is_hidden", false).order("created_at", { ascending: false }).limit(60);
   if (opts.userIds) q = q.in("user_id", opts.userIds.length ? opts.userIds : ["00000000-0000-0000-0000-000000000000"]);
   if (opts.userId) q = q.eq("user_id", opts.userId);
   if (opts.category) q = q.eq("category", opts.category);
@@ -65,7 +66,7 @@ export async function fetchSavedIds(userId: string) {
 export async function fetchSavedPosts(userId: string) {
   const ids = await fetchSavedIds(userId);
   if (!ids.length) return [];
-  const { data, error } = await supabase.from("posts").select(POST_SELECT).in("id", ids);
+  const { data, error } = await supabase.from("posts").select(POST_SELECT).eq("is_hidden", false).in("id", ids);
   if (error) throw error;
   return data as unknown as Post[];
 }
