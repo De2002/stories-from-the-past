@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Bookmark, Compass, PlusSquare, ShieldCheck, User } from "lucide-react";
+import { Bell, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { LOGO_URL } from "@/components/Brand";
@@ -21,10 +22,28 @@ export function TopBar() {
   const access = useAdminAccess();
   const notifications = useNotifications();
   const unread = notifications.data?.filter(n => !n.is_read).length ?? 0;
+  const guest = ready && !user;
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-xl items-center px-4">
-        <Link to="/" aria-label="LeBeHo home">
+      <div className="relative mx-auto flex h-14 max-w-xl items-center px-4">
+        {guest && (
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Open menu"><Menu /></Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72">
+              <SheetHeader><SheetTitle className="font-display">LeBeHo</SheetTitle></SheetHeader>
+              <nav className="mt-4 flex flex-col">
+                {([["/about", "About"], ["/guidelines", "Guidelines"], ["/terms", "Terms"], ["/privacy", "Privacy policy"], ["/contact", "Contact us"]] as const).map(([to, label]) => (
+                  <SheetClose asChild key={to}>
+                    <Link to={to} className="border-b border-border px-1 py-3 text-base">{label}</Link>
+                  </SheetClose>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        )}
+        <Link to="/" aria-label="LeBeHo home" className={guest ? "absolute left-1/2 -translate-x-1/2" : ""}>
           <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain" />
         </Link>
         <div className="ml-auto flex items-center gap-1">
