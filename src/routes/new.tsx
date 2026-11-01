@@ -13,6 +13,8 @@ export const Route = createFileRoute("/new")({
       { name: "description", content: "Post a photograph of something old and tell its story." },
       { property: "og:title", content: "Share an old thing — LeBeHo" },
       { property: "og:description", content: "Post a photograph of something old and tell its story." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: NewPost,

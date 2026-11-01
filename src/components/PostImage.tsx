@@ -31,7 +31,7 @@ export function PostImage({ src, alt, className, eager }: { src: string; alt: st
   return <img src={url} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />;
 }
 
-export function Avatar({ name, url, size = 32 }: { name: string; url?: string | null; size?: number }) {
+export function Avatar({ name, url, size = 32 }: { name: string; url?: string | null | undefined; size?: number }) {
   const imageUrl = useImageUrl(url ?? "", "avatars");
   if (imageUrl) return <img src={imageUrl} alt={name} width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />;
   return (

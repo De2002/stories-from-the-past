@@ -17,6 +17,8 @@ export const Route = createFileRoute("/p/$id")({
       { name: "description", content: "An old thing and the story behind it, shared on LeBeHo." },
       { property: "og:title", content: "A story on LeBeHo" },
       { property: "og:description", content: "An old thing and the story behind it, shared on LeBeHo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PostPage,

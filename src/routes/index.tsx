@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Scroll vintage objects, forgotten places and old technology shared by collectors worldwide." },
       { property: "og:title", content: "LeBeHo — Discover old things and their stories" },
       { property: "og:description", content: "Scroll vintage objects, forgotten places and old technology shared by collectors worldwide." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Feed,

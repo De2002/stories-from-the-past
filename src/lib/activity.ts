@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { canAdminister } from "@/lib/community";
 
 export function useAdminAccess() {
   const { user } = useAuth();
@@ -8,7 +9,7 @@ export function useAdminAccess() {
     if (!user) return false;
     const { data, error } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
     if (error) throw error;
-    return data === true;
+    return canAdminister(data ? ["admin"] : []);
   } });
 }
 

@@ -11,6 +11,8 @@ export const Route = createFileRoute("/collection")({
       { name: "description", content: "The old things and stories you've saved on LeBeHo." },
       { property: "og:title", content: "Your collection — LeBeHo" },
       { property: "og:description", content: "The old things and stories you've saved on LeBeHo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Collection,

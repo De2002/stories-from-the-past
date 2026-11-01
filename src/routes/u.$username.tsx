@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { getOwnPosts } from "@/lib/posts.functions";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, PostImage } from "@/components/PostImage";
@@ -17,6 +19,8 @@ export const Route = createFileRoute("/u/$username")({
       { name: "description", content: `Old things and their stories shared by @${params.username}.` },
       { property: "og:title", content: `@${params.username} on LeBeHo` },
       { property: "og:description", content: `Old things and their stories shared by @${params.username}.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ProfilePage,
@@ -27,10 +31,11 @@ function ProfilePage() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const fetchMine = useServerFn(getOwnPosts);
   const profile = useQuery({ queryKey: ["profile", username], queryFn: () => fetchProfile(username) });
   const posts = useQuery({
-    queryKey: ["posts", "user", profile.data?.id],
-    queryFn: () => profile.data ? fetchPosts({ userId: profile.data.id }) : Promise.resolve([]),
+    queryKey: ["posts", "user", profile.data?.id, user?.id],
+    queryFn: () => profile.data ? user?.id === profile.data.id ? fetchMine() : fetchPosts({ userId: profile.data.id }) : Promise.resolve([]),
     enabled: !!profile.data,
   });
   const [editing, setEditing] = useState(false);
