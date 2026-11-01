@@ -3,21 +3,25 @@ import { supabase } from "@/integrations/supabase/client";
 
 const cache = new Map<string, string>();
 
-export function useImageUrl(src: string) {
+export function useImageUrl(src: string, bucket = "post-images") {
   const direct = src.startsWith("/") || src.startsWith("http");
-  const [url, setUrl] = useState<string | null>(direct ? src : cache.get(src) ?? null);
+  const key = `${bucket}:${src}`;
+  const [resolved, setResolved] = useState<{ key: string; url: string } | null>(null);
+  const url = direct ? src : cache.get(key) ?? (resolved?.key === key ? resolved.url : null);
   useEffect(() => {
-    if (direct || cache.has(src)) return;
+    if (!src || direct || cache.has(key)) return;
+    let cancelled = false;
     supabase.storage
-      .from("post-images")
+      .from(bucket)
       .createSignedUrl(src, 60 * 60 * 24)
       .then(({ data }) => {
         if (data?.signedUrl) {
-          cache.set(src, data.signedUrl);
-          setUrl(data.signedUrl);
+          cache.set(key, data.signedUrl);
+          if (!cancelled) setResolved({ key, url: data.signedUrl });
         }
       });
-  }, [src, direct]);
+    return () => { cancelled = true; };
+  }, [src, direct, bucket, key]);
   return url;
 }
 
@@ -28,7 +32,8 @@ export function PostImage({ src, alt, className, eager }: { src: string; alt: st
 }
 
 export function Avatar({ name, url, size = 32 }: { name: string; url?: string | null; size?: number }) {
-  if (url) return <img src={url} alt={name} width={size} height={size} className="rounded-full object-cover" style={{ width: size, height: size }} />;
+  const imageUrl = useImageUrl(url ?? "", "avatars");
+  if (imageUrl) return <img src={imageUrl} alt={name} width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />;
   return (
     <div
       className="flex items-center justify-center rounded-full bg-sepia font-display text-primary-foreground"

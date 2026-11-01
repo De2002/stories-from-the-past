@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as PIdRouteImport } from './routes/p.$id'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 
@@ -47,6 +48,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const PIdRoute = PIdRouteImport.update({
   id: '/p/$id',
   path: '/p/$id',
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/collection': typeof CollectionRoute
   '/new': typeof NewRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/p/$id': typeof PIdRoute
   '/u/$username': typeof UUsernameRoute
 }
@@ -73,6 +81,7 @@ export interface FileRoutesByTo {
   '/collection': typeof CollectionRoute
   '/new': typeof NewRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/p/$id': typeof PIdRoute
   '/u/$username': typeof UUsernameRoute
 }
@@ -84,6 +93,7 @@ export interface FileRoutesById {
   '/collection': typeof CollectionRoute
   '/new': typeof NewRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/p/$id': typeof PIdRoute
   '/u/$username': typeof UUsernameRoute
 }
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/new'
     | '/admin'
+    | '/notifications'
     | '/p/$id'
     | '/u/$username'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/new'
     | '/admin'
+    | '/notifications'
     | '/p/$id'
     | '/u/$username'
   id:
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/new'
     | '/_authenticated/admin'
+    | '/_authenticated/notifications'
     | '/p/$id'
     | '/u/$username'
   fileRoutesById: FileRoutesById
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/p/$id': {
       id: '/p/$id'
       path: '/p/$id'
@@ -191,10 +211,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

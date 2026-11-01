@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       setState({ user: session?.user ?? null, ready: true });
-      qc.invalidateQueries();
+      if (event !== "SIGNED_OUT") qc.invalidateQueries();
     });
     return () => data.subscription.unsubscribe();
   }, [qc]);
