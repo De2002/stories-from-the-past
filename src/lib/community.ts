@@ -2,6 +2,10 @@ export function canAdminister(roles: string[]) {
   return roles.includes("admin");
 }
 
+export function canDeleteUser(actorId: string, targetId: string, targetIsAdmin: boolean) {
+  return actorId !== targetId && !targetIsAdmin;
+}
+
 export function notificationTarget(notification: { post_id: string | null; actor: { username: string } | null }) {
   if (notification.post_id) return { type: "post" as const, id: notification.post_id };
   if (notification.actor?.username) return { type: "profile" as const, username: notification.actor.username };

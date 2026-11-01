@@ -412,6 +412,10 @@ export type Database = {
     }
     Functions: {
       account_active: { Args: { uid: string }; Returns: boolean }
+      finish_user_deletion: {
+        Args: { actor: string; deletion_reason: string; target: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

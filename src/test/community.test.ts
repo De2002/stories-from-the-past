@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { canAdminister, notificationTarget } from "@/lib/community";
+import { canAdminister, canDeleteUser, notificationTarget } from "@/lib/community";
 
 describe("Community rules", () => {
+  it("allows deletion of another ordinary user", () => { expect(canDeleteUser("admin-1", "user-2", false)).toBe(true); });
+  it("protects the acting admin from self-deletion", () => { expect(canDeleteUser("admin-1", "admin-1", false)).toBe(false); });
+  it("protects other admin accounts from deletion", () => { expect(canDeleteUser("admin-1", "admin-2", true)).toBe(false); });
   it("allows admin accounts to administer the community", () => { expect(canAdminister(["user", "admin"])).toBe(true); });
   it("denies ordinary and moderator accounts admin tools", () => { expect(canAdminister(["user", "moderator"])).toBe(false); });
   it("deep links post notifications to the specific post", () => { expect(notificationTarget({ post_id: "post-42", actor: { username: "collector" } })).toEqual({ type: "post", id: "post-42" }); });
