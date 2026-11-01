@@ -8,16 +8,17 @@ export const getAdminData = createServerFn({ method: "POST" })
     const role = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     if (role.error || !role.data) throw new Error("Admin access required");
     const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-    const [users, states, posts, reports, comments, history] = await Promise.all([
+    const [users, states, posts, reports, comments, history, roles] = await Promise.all([
       db.from("profiles").select("*").order("created_at", { ascending: false }).limit(500),
       db.from("account_moderation").select("*"),
       db.from("posts").select("*, profiles!posts_user_id_fkey(username)").order("created_at", { ascending: false }).limit(200),
       db.from("reports").select("*, profiles!reports_reporter_id_fkey(username)").order("created_at", { ascending: false }).limit(200),
       db.from("comments").select("*, profiles!comments_user_id_fkey(username)").order("created_at", { ascending: false }).limit(200),
       db.from("moderation_actions").select("*").order("created_at", { ascending: false }).limit(50),
+      db.from("user_roles").select("user_id").eq("role", "admin"),
     ]);
-    for (const result of [users, states, posts, reports, comments, history]) if (result.error) throw new Error("Couldn't load admin records");
-    return { users: users.data ?? [], states: states.data ?? [], posts: posts.data ?? [], reports: reports.data ?? [], comments: comments.data ?? [], history: history.data ?? [] };
+    for (const result of [users, states, posts, reports, comments, history, roles]) if (result.error) throw new Error("Couldn't load admin records");
+    return { users: users.data ?? [], states: states.data ?? [], posts: posts.data ?? [], reports: reports.data ?? [], comments: comments.data ?? [], history: history.data ?? [], adminIds: (roles.data ?? []).map(r => r.user_id) };
   });
 
 export const moderate = createServerFn({ method: "POST" })
