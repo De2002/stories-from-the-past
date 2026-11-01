@@ -29,6 +29,13 @@
       "when": 1793492215956,
       "tag": "0003_restrict_activity_trigger_execution",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793507921738,
+      "tag": "0004_admin_user_deletion_cleanup",
+      "breakpoints": true
     }
   ]
 }
