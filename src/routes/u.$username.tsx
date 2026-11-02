@@ -112,7 +112,10 @@ function ProfilePage() {
                   <Button variant="outline" onClick={signOut}>Sign out</Button>
                 </>
               ) : (
-                <FollowButton targetId={pr.id} />
+                <>
+                  <FollowButton targetId={pr.id} />
+                  <Button asChild variant="outline"><Link to="/messages/$username" params={{ username: pr.username }}>Message</Link></Button>
+                </>
               )}
             </div>
           </div>
