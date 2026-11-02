@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
+import { Bell, MessageCircle, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { LOGO_URL } from "@/components/Brand";
 import { useAdminAccess, useNotifications } from "@/lib/activity";
+import { useInbox } from "@/lib/messages";
 import { Button } from "@/components/ui/button";
 
 export function useMyProfile() {
@@ -22,6 +23,8 @@ export function TopBar() {
   const access = useAdminAccess();
   const notifications = useNotifications();
   const unread = notifications.data?.filter(n => !n.is_read).length ?? 0;
+  const inbox = useInbox();
+  const dms = inbox.data?.reduce((n, c) => n + c.unread, 0) ?? 0;
   const guest = ready && !user;
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
@@ -48,6 +51,7 @@ export function TopBar() {
         </Link>
         <div className="ml-auto flex items-center gap-1">
           {access.data && <Button asChild variant="ghost" size="icon"><Link to="/admin" aria-label="Admin dashboard" title="Admin dashboard"><ShieldCheck /></Link></Button>}
+          {user && <Button asChild variant="ghost" size="icon"><Link to="/messages" aria-label={`Messages${dms ? `, ${dms} unread` : ""}`} title="Messages" className="relative"><MessageCircle />{dms > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-primary-foreground">{dms > 99 ? "99+" : dms}</span>}</Link></Button>}
           {user && <Button asChild variant="ghost" size="icon"><Link to="/notifications" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`} title="Notifications" className="relative"><Bell />{unread > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-primary-foreground">{unread > 99 ? "99+" : unread}</span>}</Link></Button>}
         {ready && !user && (
           <Link to="/auth" className="ml-auto rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground">
