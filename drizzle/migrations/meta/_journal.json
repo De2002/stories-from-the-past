@@ -36,6 +36,13 @@
       "when": 1793507921738,
       "tag": "0004_admin_user_deletion_cleanup",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793600601560,
+      "tag": "0005_direct_messages",
+      "breakpoints": true
     }
   ]
 }
