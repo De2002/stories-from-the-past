@@ -3,12 +3,13 @@ import { Link, useLocation } from "@tanstack/react-router";
 import logo from "@/assets/lebeho-logo-sm.png.asset.json";
 import { useAuth } from "@/lib/auth";
 
-export const LOGO_URL = logo.url;
+// The custom domain does not serve the asset gateway; use its verified origin.
+export const LOGO_URL = new URL(logo.url, "https://id-preview--20eaff28-83a4-4d63-ac42-df2c2d8299cc.lovable.app").href;
 
 export function LogoLoader({ label }: { label?: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 p-10">
-      <img src={logo.url} alt="Loading" className="h-14 w-14 animate-pulse object-contain" />
+      <img src={LOGO_URL} alt="Loading" className="h-14 w-14 animate-pulse object-contain" />
       {label && <span className="label-tag text-muted-foreground">{label}</span>}
     </div>
   );
@@ -23,7 +24,7 @@ export function SplashScreen() {
   if (!show) return null;
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background">
-      <img src={logo.url} alt="LeBeHo" className="h-32 w-32 animate-pulse object-contain" />
+      <img src={LOGO_URL} alt="LeBeHo" className="h-32 w-32 animate-pulse object-contain" />
     </div>
   );
 }
@@ -45,7 +46,7 @@ export function WelcomeGate() {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-background">
       <div className="mx-auto flex min-h-full max-w-md flex-col items-center px-6 py-10 text-center">
-        <img src={logo.url} alt="LeBeHo" className="h-28 w-28 object-contain" />
+        <img src={LOGO_URL} alt="LeBeHo" className="h-28 w-28 object-contain" />
         <h1 className="mt-6 text-4xl italic">Every old thing has a story.</h1>
         <p className="mt-3 text-muted-foreground">
           LeBeHo is a worldwide photo network for the past — vintage objects, old photographs, places and the people in them, shared with the stories behind them.
