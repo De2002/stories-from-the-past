@@ -24,9 +24,18 @@ export function PostCard({ post, eager }: { post: Post; eager?: boolean | undefi
           <PostImage src={post.image_url} alt={post.title} eager={eager} className="aspect-[4/5] w-full object-cover" />
         </div>
       </Link>
+      {post.title && (
+        <Link to="/p/$id" params={{ id: post.id }} className="block px-5 pt-2 md:hidden">
+          <p className="font-hand text-[1.15rem] leading-tight text-foreground/90">{post.title}</p>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            {post.era && <span className="label-tag text-primary">{post.era}</span>}
+            <span className="label-tag text-muted-foreground">· {post.category}</span>
+          </div>
+        </Link>
+      )}
       <div className="space-y-2 px-4 pt-3">
         <PostActions post={post} />
-        <div className="flex items-baseline gap-2">
+        <div className="hidden items-baseline gap-2 md:flex">
           {post.era && <span className="label-tag text-primary">{post.era}</span>}
           <span className="label-tag text-muted-foreground">· {post.category}</span>
         </div>
