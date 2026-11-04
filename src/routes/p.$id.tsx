@@ -65,11 +65,13 @@ function PostPage() {
           {p.location && <span className="label-tag text-muted-foreground">{p.location}</span>}
           <span className="label-tag text-muted-foreground">{p.category}</span>
         </div>
-        <h1 className="text-3xl leading-tight">{p.title}</h1>
+        <h1 className="sr-only text-3xl leading-tight md:not-sr-only md:block">{p.title}</h1>
         {author && (
           <div className="flex items-center gap-3">
             <Link to="/u/$username" params={{ username: author.username }} className="flex items-center gap-2">
-              <Avatar name={author.display_name || author.username} url={author.avatar_url} />
+              <span className="hidden md:block">
+                <Avatar name={author.display_name || author.username} url={author.avatar_url} />
+              </span>
               <span className="text-sm font-semibold">{author.username}</span>
             </Link>
             <span className="text-xs text-muted-foreground">{timeAgo(p.created_at)}</span>
@@ -78,8 +80,13 @@ function PostPage() {
             </div>
           </div>
         )}
-        <div className="border-l-2 border-sepia pl-4">
+        <div className="flow-root border-l-2 border-sepia pl-4">
           <div className="label-tag mb-2 text-muted-foreground">The backstory</div>
+          {author && (
+            <span className="story-float md:hidden">
+              <Avatar name={author.display_name || author.username} url={author.avatar_url} size={92} square />
+            </span>
+          )}
           <p className="whitespace-pre-line font-display text-lg leading-relaxed">{p.story}</p>
         </div>
 
