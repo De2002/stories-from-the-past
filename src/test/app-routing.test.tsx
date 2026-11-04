@@ -15,3 +15,13 @@ describe("App routing", () => {
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
 });
+
+describe("Discover route", () => {
+  it("matches a page for /discover instead of falling back to not found", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/discover");
+
+    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+  });
+});
