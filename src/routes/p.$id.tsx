@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, PostImage } from "@/components/PostImage";
@@ -80,14 +80,9 @@ function PostPage() {
             </div>
           </div>
         )}
-        <div className="flow-root border-l-2 border-sepia pl-4">
+        <div className="border-l-2 border-sepia pl-4">
           <div className="label-tag mb-2 text-muted-foreground">The backstory</div>
-          {author && (
-            <span className="story-float md:hidden">
-              <Avatar name={author.display_name || author.username} url={author.avatar_url} size={92} square />
-            </span>
-          )}
-          <p className="whitespace-pre-line font-display text-lg leading-relaxed">{p.story}</p>
+          <Backstory text={p.story} />
         </div>
 
         <section className="border-t border-border pt-4">
@@ -126,5 +121,42 @@ function PostPage() {
         </section>
       </div>
     </article>
+  );
+}
+
+function Backstory({ text }: { text: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [open, setOpen] = useState(false);
+  const [isLong, setIsLong] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setIsLong(el.scrollHeight > el.clientHeight + 8);
+    measure();
+    const raf = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(raf);
+  }, [text]);
+
+  return (
+    <div>
+      <p
+        ref={ref}
+        className={`whitespace-pre-line font-display text-lg leading-relaxed${open ? "" : " story-clamp"}`}
+      >
+        {text}
+      </p>
+      {isLong && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="mt-2 text-sm font-medium text-primary"
+        >
+          {open ? "Read less" : "Read more"}
+        </button>
+      )}
+    </div>
   );
 }
