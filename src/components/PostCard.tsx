@@ -30,7 +30,7 @@ export function PostCard({ post, eager }: { post: Post; eager?: boolean | undefi
           {post.era && <span className="label-tag text-primary">{post.era}</span>}
           <span className="label-tag text-muted-foreground">· {post.category}</span>
         </div>
-        <Link to="/p/$id" params={{ id: post.id }} className="block">
+        <Link to="/p/$id" params={{ id: post.id }} className="hidden md:block">
           <h2 className="text-xl leading-snug">{post.title}</h2>
           <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{post.story}</p>
           <span className="mt-1 inline-block text-sm text-primary">Read the backstory</span>
