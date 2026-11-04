@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, MessageCircle, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
+import { Bell, LayoutGrid, MessageCircle, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -74,6 +74,10 @@ export function BottomNav() {
         <Link to="/" className={cls} activeOptions={{ exact: true }}>
           <Compass className="h-6 w-6" strokeWidth={1.6} />
           <span className="label-tag">Feed</span>
+        </Link>
+        <Link to="/discover" className={cls}>
+          <LayoutGrid className="h-6 w-6" strokeWidth={1.6} />
+          <span className="label-tag">Discover</span>
         </Link>
         <Link to="/new" className={cls}>
           <PlusSquare className="h-6 w-6" strokeWidth={1.6} />

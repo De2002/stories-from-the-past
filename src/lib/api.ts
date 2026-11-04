@@ -37,6 +37,21 @@ export async function fetchPosts(opts: { userIds?: string[] | undefined; userId?
   return data as unknown as Post[];
 }
 
+export async function fetchRandomPosts(limit = 300) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("is_hidden", false)
+    .limit(limit);
+  if (error) throw error;
+  const rows = data as unknown as Post[];
+  for (let i = rows.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [rows[i], rows[j]] = [rows[j], rows[i]];
+  }
+  return rows;
+}
+
 export async function fetchPost(id: string) {
   const { data, error } = await supabase.from("posts").select(POST_SELECT).eq("id", id).maybeSingle();
   if (error) throw error;
