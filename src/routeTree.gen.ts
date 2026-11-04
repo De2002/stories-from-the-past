@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GuidelinesRouteImport } from './routes/guidelines'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -53,6 +54,11 @@ const CollectionRoute = CollectionRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiscoverRoute = DiscoverRouteImport.update({
+  id: '/discover',
+  path: '/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuidelinesRoute = GuidelinesRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/collection': typeof CollectionRoute
   '/contact': typeof ContactRoute
+  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/collection': typeof CollectionRoute
   '/contact': typeof ContactRoute
+  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/collection': typeof CollectionRoute
   '/contact': typeof ContactRoute
+  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
   '/new': typeof NewRoute
   '/privacy': typeof PrivacyRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collection'
     | '/contact'
+    | '/discover'
     | '/guidelines'
     | '/new'
     | '/privacy'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collection'
     | '/contact'
+    | '/discover'
     | '/guidelines'
     | '/new'
     | '/privacy'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collection'
     | '/contact'
+    | '/discover'
     | '/guidelines'
     | '/new'
     | '/privacy'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CollectionRoute: typeof CollectionRoute
   ContactRoute: typeof ContactRoute
+  DiscoverRoute: typeof DiscoverRoute
   GuidelinesRoute: typeof GuidelinesRoute
   NewRoute: typeof NewRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/discover': {
+      id: '/discover'
+      path: '/discover'
+      fullPath: '/discover'
+      preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guidelines': {
@@ -373,6 +393,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CollectionRoute: CollectionRoute,
   ContactRoute: ContactRoute,
+  DiscoverRoute: DiscoverRoute,
   GuidelinesRoute: GuidelinesRoute,
   NewRoute: NewRoute,
   PrivacyRoute: PrivacyRoute,

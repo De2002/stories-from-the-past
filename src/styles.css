@@ -94,3 +94,9 @@
   shape-outside: margin-box;
   shape-margin: 0.45rem;
 }
+
+@utility print-frame-sm {
+  background: var(--card);
+  padding: 0.25rem;
+  box-shadow: var(--shadow-print);
+}
