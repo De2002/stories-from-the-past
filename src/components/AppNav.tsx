@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, LayoutGrid, MessageCircle, Bookmark, Compass, Menu, PlusSquare, ShieldCheck, User } from "lucide-react";
+import { Bell, LayoutGrid, MessageCircle, Bookmark, Compass, Menu, MoreHorizontal, PlusSquare, ShieldCheck, User } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { LOGO_URL } from "@/components/Brand";
@@ -30,21 +31,40 @@ export function TopBar() {
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
       <div className="relative mx-auto flex h-14 max-w-xl items-center px-4 md:h-20 md:max-w-6xl md:gap-3 md:px-6">
         {guest && (
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Open menu"><Menu /></Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72">
-              <SheetHeader><SheetTitle className="font-display">LeBeHo</SheetTitle></SheetHeader>
-              <nav className="mt-4 flex flex-col">
+          <>
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="Open menu"><Menu /></Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-72">
+                  <SheetHeader><SheetTitle className="font-display">LeBeHo</SheetTitle></SheetHeader>
+                  <nav className="mt-4 flex flex-col">
+                    {([["/about", "About"], ["/guidelines", "Guidelines"], ["/terms", "Terms"], ["/privacy", "Privacy policy"], ["/contact", "Contact us"]] as const).map(([to, label]) => (
+                      <SheetClose asChild key={to}>
+                        <Link to={to} className="border-b border-border px-1 py-3 text-base">{label}</Link>
+                      </SheetClose>
+                    ))}
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="hidden gap-2 px-3 text-muted-foreground md:inline-flex" aria-label="More pages">
+                  <MoreHorizontal className="h-5 w-5" />
+                  <span>More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
                 {([["/about", "About"], ["/guidelines", "Guidelines"], ["/terms", "Terms"], ["/privacy", "Privacy policy"], ["/contact", "Contact us"]] as const).map(([to, label]) => (
-                  <SheetClose asChild key={to}>
-                    <Link to={to} className="border-b border-border px-1 py-3 text-base">{label}</Link>
-                  </SheetClose>
+                  <DropdownMenuItem asChild key={to}>
+                    <Link to={to}>{label}</Link>
+                  </DropdownMenuItem>
                 ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         )}
         <Link to="/" aria-label="LeBeHo home" className={guest ? "absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:shrink-0" : "shrink-0"}>
           <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain md:h-12 md:w-12" />
@@ -72,7 +92,7 @@ function NavigationEntries({ desktop = false }: { desktop?: boolean }) {
     ? "gap-2 text-muted-foreground [&.active]:bg-accent [&.active]:text-foreground"
     : "flex h-auto flex-1 flex-col items-center gap-0.5 rounded-none px-0 py-2 text-muted-foreground [&.active]:text-foreground";
   const iconClass = desktop ? "h-5 w-5" : "h-6 w-6";
-  const labelClass = desktop ? "hidden lg:inline" : "label-tag";
+  const labelClass = desktop ? "inline" : "label-tag";
   return (
     <>
         <Button asChild variant="ghost" className={cls}><Link to="/" aria-label="Feed" title="Feed" activeOptions={{ exact: true }}>
