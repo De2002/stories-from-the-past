@@ -49,28 +49,14 @@ export function TopBar() {
                 </SheetContent>
               </Sheet>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="hidden gap-2 px-3 text-muted-foreground md:inline-flex" aria-label="More pages">
-                  <MoreHorizontal className="h-5 w-5" />
-                  <span>More</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {([["/about", "About"], ["/guidelines", "Guidelines"], ["/terms", "Terms"], ["/privacy", "Privacy policy"], ["/contact", "Contact us"]] as const).map(([to, label]) => (
-                  <DropdownMenuItem asChild key={to}>
-                    <Link to={to}>{label}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </>
         )}
         <Link to="/" aria-label="LeBeHo home" className={guest ? "absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:shrink-0" : "shrink-0"}>
           <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain md:h-12 md:w-12" />
         </Link>
-        <nav aria-label="Desktop navigation" className="hidden min-w-0 items-center gap-1 md:flex">
+        <nav aria-label="Desktop navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
           <NavigationEntries desktop />
+          <MorePagesMenu />
         </nav>
         <div className="ml-auto flex items-center gap-1">
           {access.data && <Button asChild variant="ghost" size="icon"><Link to="/admin" aria-label="Admin dashboard" title="Admin dashboard"><ShieldCheck /></Link></Button>}
@@ -82,6 +68,26 @@ export function TopBar() {
         </div>
       </div>
     </header>
+  );
+}
+
+function MorePagesMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="gap-2 px-3 text-muted-foreground [&[data-state=open]]:bg-accent [&[data-state=open]]:text-foreground" aria-label="More pages">
+          <MoreHorizontal className="h-5 w-5" />
+          <span>More</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center">
+        {([["/about", "About"], ["/guidelines", "Guidelines"], ["/terms", "Terms"], ["/privacy", "Privacy policy"], ["/contact", "Contact us"]] as const).map(([to, label]) => (
+          <DropdownMenuItem asChild key={to}>
+            <Link to={to}>{label}</Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
