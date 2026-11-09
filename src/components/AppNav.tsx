@@ -28,7 +28,7 @@ export function TopBar() {
   const guest = ready && !user;
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-      <div className="relative mx-auto flex h-14 max-w-xl items-center px-4">
+      <div className="relative mx-auto flex h-14 max-w-xl items-center px-4 md:h-20 md:max-w-6xl md:gap-3 md:px-6">
         {guest && (
           <Sheet>
             <SheetTrigger asChild>
@@ -46,17 +46,18 @@ export function TopBar() {
             </SheetContent>
           </Sheet>
         )}
-        <Link to="/" aria-label="LeBeHo home" className={guest ? "absolute left-1/2 -translate-x-1/2" : ""}>
-          <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain" />
+        <Link to="/" aria-label="LeBeHo home" className={guest ? "absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:shrink-0" : "shrink-0"}>
+          <img src={LOGO_URL} alt="LeBeHo" className="h-10 w-10 object-contain md:h-12 md:w-12" />
         </Link>
+        <nav aria-label="Desktop navigation" className="hidden min-w-0 items-center gap-1 md:flex">
+          <NavigationEntries desktop />
+        </nav>
         <div className="ml-auto flex items-center gap-1">
           {access.data && <Button asChild variant="ghost" size="icon"><Link to="/admin" aria-label="Admin dashboard" title="Admin dashboard"><ShieldCheck /></Link></Button>}
           {user && <Button asChild variant="ghost" size="icon"><Link to="/messages" aria-label={`Messages${dms ? `, ${dms} unread` : ""}`} title="Messages" className="relative"><MessageCircle />{dms > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-primary-foreground">{dms > 99 ? "99+" : dms}</span>}</Link></Button>}
           {user && <Button asChild variant="ghost" size="icon"><Link to="/notifications" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`} title="Notifications" className="relative"><Bell />{unread > 0 && <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-primary-foreground">{unread > 99 ? "99+" : unread}</span>}</Link></Button>}
         {ready && !user && (
-          <Link to="/auth" className="ml-auto rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground">
-            Sign in
-          </Link>
+          <Button asChild size="sm"><Link to="/auth">Sign in</Link></Button>
         )}
         </div>
       </div>
@@ -64,40 +65,52 @@ export function TopBar() {
   );
 }
 
-export function BottomNav() {
+function NavigationEntries({ desktop = false }: { desktop?: boolean }) {
   const { user } = useAuth();
   const me = useMyProfile();
-  const cls = "flex flex-1 flex-col items-center gap-0.5 py-2 text-muted-foreground [&.active]:text-foreground";
+  const cls = desktop
+    ? "gap-2 text-muted-foreground [&.active]:bg-accent [&.active]:text-foreground"
+    : "flex h-auto flex-1 flex-col items-center gap-0.5 rounded-none px-0 py-2 text-muted-foreground [&.active]:text-foreground";
+  const iconClass = desktop ? "h-5 w-5" : "h-6 w-6";
+  const labelClass = desktop ? "hidden lg:inline" : "label-tag";
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex max-w-xl">
-        <Link to="/" className={cls} activeOptions={{ exact: true }}>
-          <Compass className="h-6 w-6" strokeWidth={1.6} />
-          <span className="label-tag">Feed</span>
-        </Link>
-        <Link to="/discover" className={cls}>
-          <LayoutGrid className="h-6 w-6" strokeWidth={1.6} />
-          <span className="label-tag">Discover</span>
-        </Link>
-        <Link to="/new" className={cls}>
-          <PlusSquare className="h-6 w-6" strokeWidth={1.6} />
-          <span className="label-tag">Post</span>
-        </Link>
-        <Link to="/collection" className={cls}>
-          <Bookmark className="h-6 w-6" strokeWidth={1.6} />
-          <span className="label-tag">Collection</span>
-        </Link>
+    <>
+        <Button asChild variant="ghost" className={cls}><Link to="/" aria-label="Feed" title="Feed" activeOptions={{ exact: true }}>
+          <Compass className={iconClass} strokeWidth={1.6} />
+          <span className={labelClass}>Feed</span>
+        </Link></Button>
+        <Button asChild variant="ghost" className={cls}><Link to="/discover" aria-label="Discover" title="Discover">
+          <LayoutGrid className={iconClass} strokeWidth={1.6} />
+          <span className={labelClass}>Discover</span>
+        </Link></Button>
+        <Button asChild variant="ghost" className={cls}><Link to="/new" aria-label="Post" title="Post">
+          <PlusSquare className={iconClass} strokeWidth={1.6} />
+          <span className={labelClass}>Post</span>
+        </Link></Button>
+        <Button asChild variant="ghost" className={cls}><Link to="/collection" aria-label="Collection" title="Collection">
+          <Bookmark className={iconClass} strokeWidth={1.6} />
+          <span className={labelClass}>Collection</span>
+        </Link></Button>
         {user && me.data ? (
-          <Link to="/u/$username" params={{ username: me.data.username }} className={cls}>
-            <User className="h-6 w-6" strokeWidth={1.6} />
-            <span className="label-tag">Me</span>
-          </Link>
+          <Button asChild variant="ghost" className={cls}><Link to="/u/$username" params={{ username: me.data.username }} aria-label="Me" title="Me">
+            <User className={iconClass} strokeWidth={1.6} />
+            <span className={labelClass}>Me</span>
+          </Link></Button>
         ) : (
-          <Link to="/auth" className={cls}>
-            <User className="h-6 w-6" strokeWidth={1.6} />
-            <span className="label-tag">Me</span>
-          </Link>
+          <Button asChild variant="ghost" className={cls}><Link to="/auth" aria-label="Me" title="Me">
+            <User className={iconClass} strokeWidth={1.6} />
+            <span className={labelClass}>Me</span>
+          </Link></Button>
         )}
+    </>
+  );
+}
+
+export function BottomNav() {
+  return (
+    <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur md:hidden">
+      <div className="mx-auto flex max-w-xl">
+        <NavigationEntries />
       </div>
     </nav>
   );
