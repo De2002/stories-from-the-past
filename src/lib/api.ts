@@ -23,18 +23,62 @@ export type Post = {
   comments: { count: number }[];
 };
 
-export const CATEGORIES = ["Objects", "People", "Technology", "Photography", "Music", "Household", "Places", "Fashion", "Documents"];
+export const CATEGORIES = [
+  "Objects",
+  "People",
+  "Technology",
+  "Photography",
+  "Music",
+  "Household",
+  "Places",
+  "Fashion",
+  "Documents",
+];
 
 const POST_SELECT = "*, profiles!posts_user_id_fkey(*), likes(user_id), comments(count)";
 
-export async function fetchPosts(opts: { userIds?: string[] | undefined; userId?: string | undefined; category?: string | undefined } = {}) {
-  let q = supabase.from("posts").select(POST_SELECT).eq("is_hidden", false).order("created_at", { ascending: false }).limit(60);
-  if (opts.userIds) q = q.in("user_id", opts.userIds.length ? opts.userIds : ["00000000-0000-0000-0000-000000000000"]);
+export async function fetchPosts(
+  opts: {
+    userIds?: string[] | undefined;
+    userId?: string | undefined;
+    category?: string | undefined;
+  } = {},
+) {
+  let q = supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: false })
+    .limit(60);
+  if (opts.userIds)
+    q = q.in(
+      "user_id",
+      opts.userIds.length ? opts.userIds : ["00000000-0000-0000-0000-000000000000"],
+    );
   if (opts.userId) q = q.eq("user_id", opts.userId);
   if (opts.category) q = q.eq("category", opts.category);
   const { data, error } = await q;
   if (error) throw error;
   return data as unknown as Post[];
+}
+
+export async function fetchOldestPosts(limit = 6) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return data as unknown as Post[];
+}
+
+export async function fetchArchiveStats() {
+  const [{ count: posts }, { count: users }] = await Promise.all([
+    supabase.from("posts").select("id", { count: "exact", head: true }).eq("is_hidden", false),
+    supabase.from("profiles").select("id", { count: "exact", head: true }),
+  ]);
+  return { posts: posts ?? 0, users: users ?? 0 };
 }
 
 export async function fetchRandomPosts(limit = 300) {
@@ -52,7 +96,11 @@ export async function fetchRandomPosts(limit = 300) {
 }
 
 export async function fetchPost(id: string) {
-  const { data, error } = await supabase.from("posts").select(POST_SELECT).eq("id", id).maybeSingle();
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("id", id)
+    .maybeSingle();
   if (error) throw error;
   return data as unknown as Post | null;
 }
@@ -64,7 +112,13 @@ export async function fetchComments(postId: string) {
     .eq("post_id", postId)
     .order("created_at");
   if (error) throw error;
-  return data as unknown as { id: string; body: string; created_at: string; user_id: string; profiles: Profile }[];
+  return data as unknown as {
+    id: string;
+    body: string;
+    created_at: string;
+    user_id: string;
+    profiles: Profile;
+  }[];
 }
 
 export async function fetchFollowingIds(userId: string) {
@@ -80,16 +134,27 @@ export async function fetchSavedIds(userId: string) {
 export async function fetchSavedPosts(userId: string) {
   const ids = await fetchSavedIds(userId);
   if (!ids.length) return [];
-  const { data, error } = await supabase.from("posts").select(POST_SELECT).eq("is_hidden", false).in("id", ids);
+  const { data, error } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("is_hidden", false)
+    .in("id", ids);
   if (error) throw error;
   return data as unknown as Post[];
 }
 
 export async function fetchProfile(username: string) {
-  const { data } = await supabase.from("profiles").select("*").eq("username", username).maybeSingle();
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .maybeSingle();
   if (!data) return null;
   const [{ count: followers }, { count: following }] = await Promise.all([
-    supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", data.id),
+    supabase
+      .from("follows")
+      .select("*", { count: "exact", head: true })
+      .eq("following_id", data.id),
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", data.id),
   ]);
   return { ...(data as Profile), followers: followers ?? 0, following: following ?? 0 };
