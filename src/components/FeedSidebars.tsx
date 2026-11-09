@@ -35,7 +35,7 @@ export function CategoryRail({
           ))}
         </nav>
       </div>
-      <div className="grid grid-cols-2 gap-4 border-t border-border pt-5 lg:grid-cols-1">
+      <div className="grid grid-cols-2 gap-4 pt-5 lg:grid-cols-1">
         <Stat label="pictures posted" value={stats ? stats.posts.toLocaleString() : "—"} />
         <Stat label="collectors" value={stats ? stats.users.toLocaleString() : "—"} />
       </div>
@@ -55,7 +55,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 export function OldestRail({ posts }: { posts: Post[] }) {
   return (
     <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-      <div className="flex items-end justify-between border-b border-border pb-3">
+      <div className="flex items-end justify-between pb-3">
         <div>
           <p className="label-tag text-muted-foreground">From the beginning</p>
           <h2 className="mt-1 font-display text-xl">The first frames</h2>
