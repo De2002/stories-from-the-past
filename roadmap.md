@@ -1,4 +1,6 @@
 # Work
+- [ ] Use the current logo for the favicon and verify it loads.
+- [ ] Move desktop navigation into the header; preserve mobile navigation and verify both layouts.
 - [x] Fix the shared header, welcome, splash, and loader logo URL; verified preview images and image loading from the live custom domain (publishing still required).
 - [x] Add secure permanent user deletion with confirmation; verify temporary profile/content removal and audit history (real sign-in deletion not exercised).
 - [x] Add secure admin user management, reported-post review, content moderation, and action history.
