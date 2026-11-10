@@ -7,9 +7,9 @@ export function CategoryRail({
   onSelect,
   stats,
 }: {
-  activeCategory?: string;
+  activeCategory?: string | undefined;
   onSelect: (category?: string) => void;
-  stats?: { posts: number; users: number };
+  stats?: { posts: number; users: number } | undefined;
 }) {
   return (
     <aside className="space-y-8 lg:sticky lg:top-24 lg:self-start">
