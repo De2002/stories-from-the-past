@@ -63,7 +63,7 @@ function Feed() {
 
   return (
     <div>
-      <div className="mx-auto lg:max-w-[680px]">
+      <div className="mx-auto md:max-w-[680px]">
       <div className="hidden border-b border-border px-4 py-3 lg:block">
         <p className="label-tag text-muted-foreground">A living archive of ordinary treasures</p>
       </div>
@@ -97,7 +97,7 @@ function Feed() {
         ))}
       </div>
 
-      <div className="flex gap-2 overflow-x-auto px-4 pb-3 lg:hidden [scrollbar-width:none]">
+      <div className="flex gap-2 overflow-x-auto px-4 pb-3 md:hidden [scrollbar-width:none]">
         {[undefined, ...CATEGORIES].map((category) => (
           <button
             key={category ?? "all"}
@@ -110,8 +110,8 @@ function Feed() {
       </div>
       </div>
 
-      <div className="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 lg:grid-cols-[190px_minmax(0,680px)_190px] lg:justify-center lg:gap-10 lg:px-8 xl:grid-cols-[240px_680px_240px] xl:gap-16">
-        <div className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+      <div className="mx-auto grid max-w-[1500px] grid-cols-[minmax(0,1fr)] gap-8 pb-12 md:grid-cols-[160px_minmax(0,1fr)_160px] md:gap-6 md:px-6 lg:grid-cols-[190px_minmax(0,680px)_190px] lg:justify-center lg:gap-10 lg:px-8 xl:grid-cols-[240px_680px_240px] xl:gap-16">
+        <div className="hidden md:sticky md:top-24 md:block md:self-start">
           <CategoryRail activeCategory={cat} onSelect={setCat} stats={stats.data} />
         </div>
         <main className="min-w-0">
@@ -127,7 +127,7 @@ function Feed() {
             <PostCard key={p.id} post={p} eager={i === 0} />
           ))}
         </main>
-        {oldest.data && <OldestRail posts={oldest.data} />}
+        <div className="hidden md:block">{oldest.data && <OldestRail posts={oldest.data} />}</div>
       </div>
     </div>
   );

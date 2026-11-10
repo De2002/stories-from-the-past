@@ -131,7 +131,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TopBar />
-        <main className={`mx-auto pb-24 md:pb-8 ${wide ? "max-w-xl lg:max-w-none" : "max-w-xl"}`}>
+        <main className={`mx-auto pb-24 md:pb-8 ${wide ? "max-w-xl md:max-w-none" : "max-w-xl"}`}>
           <Outlet />
         </main>
         <BottomNav />
