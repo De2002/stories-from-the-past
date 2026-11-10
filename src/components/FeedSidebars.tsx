@@ -12,7 +12,7 @@ export function CategoryRail({
   stats?: { posts: number; users: number } | undefined;
 }) {
   return (
-    <aside className="space-y-8 lg:sticky lg:top-24 lg:self-start">
+    <aside className="space-y-8 md:sticky md:top-24 md:self-start">
       <div>
         <p className="label-tag mb-3 text-muted-foreground">Browse the archive</p>
         <nav aria-label="Categories" className="space-y-1">
@@ -35,7 +35,7 @@ export function CategoryRail({
           ))}
         </nav>
       </div>
-      <div className="grid grid-cols-2 gap-4 pt-5 lg:grid-cols-1">
+      <div className="grid grid-cols-2 gap-4 pt-5 md:grid-cols-1">
         <Stat label="pictures posted" value={stats ? stats.posts.toLocaleString() : "—"} />
         <Stat label="collectors" value={stats ? stats.users.toLocaleString() : "—"} />
       </div>
@@ -54,7 +54,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 export function OldestRail({ posts }: { posts: Post[] }) {
   return (
-    <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+    <aside className="space-y-4 md:sticky md:top-24 md:self-start">
       <div className="flex items-end justify-between pb-3">
         <div>
           <p className="label-tag text-muted-foreground">From the beginning</p>
