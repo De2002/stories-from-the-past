@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  useRouterState,
   Outlet,
   Link,
   createRootRouteWithContext,
@@ -124,12 +125,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const wide = useRouterState({ select: (s) => s.location.pathname === "/" });
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TopBar />
-        <main className="mx-auto max-w-xl pb-24 md:pb-8">
+        <main className={`mx-auto pb-24 md:pb-8 ${wide ? "max-w-xl lg:max-w-none" : "max-w-xl"}`}>
           <Outlet />
         </main>
         <BottomNav />

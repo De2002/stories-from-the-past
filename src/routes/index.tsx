@@ -63,6 +63,7 @@ function Feed() {
 
   return (
     <div>
+      <div className="mx-auto lg:max-w-[680px]">
       <div className="hidden border-b border-border px-4 py-3 lg:block">
         <p className="label-tag text-muted-foreground">A living archive of ordinary treasures</p>
       </div>
@@ -107,9 +108,12 @@ function Feed() {
           </button>
         ))}
       </div>
+      </div>
 
       <div className="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 lg:grid-cols-[190px_minmax(0,680px)_190px] lg:justify-center lg:gap-10 lg:px-8 xl:grid-cols-[240px_680px_240px] xl:gap-16">
-        <CategoryRail activeCategory={cat} onSelect={setCat} stats={stats.data} />
+        <div className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+          <CategoryRail activeCategory={cat} onSelect={setCat} stats={stats.data} />
+        </div>
         <main className="min-w-0">
           {posts.isLoading && <LogoLoader label="Dusting off the archive" />}
           {posts.data?.length === 0 && (
